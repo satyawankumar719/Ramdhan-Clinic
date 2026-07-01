@@ -7,7 +7,8 @@ const User = require('../models/User');
  * @returns {string} The signed JWT.
  */
 const generateToken = (id) => {
-  console.log("user token generate")
+  console.log("user token generate", process.env.JWT_SECRET)
+  
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d', // Token expires in 30 days
   });
