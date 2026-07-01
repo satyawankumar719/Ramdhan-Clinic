@@ -30,7 +30,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+
 app.use(express.json()); // Body parser for application/json
 app.use(cookieParser()); // Cookie parser for extracting auth token from cookies
 
