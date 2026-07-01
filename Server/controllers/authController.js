@@ -7,6 +7,7 @@ const User = require('../models/User');
  * @returns {string} The signed JWT.
  */
 const generateToken = (id) => {
+  console.log("user token generate")
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d', // Token expires in 30 days
   });
@@ -56,6 +57,7 @@ const registerUser = async (req, res) => {
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
         SameSite:'none'
       });
+       console.log("cookie sends successfully")
 
       return res.status(201).json({
         success: true,
@@ -127,6 +129,7 @@ const loginUser = async (req, res) => {
       secure: process.env.NODE_ENV === 'production',
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
+        console.log("cookie sends successfully")
 
     return res.status(200).json({
       success: true,
