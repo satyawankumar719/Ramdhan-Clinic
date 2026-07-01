@@ -147,11 +147,11 @@ export default function Login() {
               <Label>Email</Label>
               <div className="relative mt-1.5">
                 <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input 
-                  type="email" 
-                  required 
-                  placeholder="you@medicare.com" 
-                  className="pl-9" 
+                <Input
+                  type="email"
+                  required
+                  placeholder="you@medicare.com"
+                  className="pl-9"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -161,21 +161,21 @@ export default function Login() {
               <Label>Password</Label>
               <div className="relative mt-1.5">
                 <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input 
-                  type="password" 
-                  required 
-                  placeholder="••••••••" 
+                <Input
+                  type="password"
+                  required
+                  placeholder="••••••••"
                   className="pl-9"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               <div className="mt-1.5 text-right text-xs">
-                <Link to="#" className="text-primary hover:underline">Forgot password?</Link>
+                <Link to="/forgot-password" className="text-primary hover:underline">Forgot password?</Link>
               </div>
             </div>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-hero text-white shadow-soft hover:opacity-95"
               disabled={isLoading}
             >

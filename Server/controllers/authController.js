@@ -195,9 +195,58 @@ const logoutUser = async (req, res) => {
   }
 };
 
+/**
+ * @desc    Reset user password by email
+ * @route   PATCH /api/auth/reset-password
+ * @access  Public
+ */
+const resetPassword = async (req, res) => {
+  try {
+    const { email, password, confirmPassword } = req.body;
+
+    if (!email || !password || !confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide email, new password, and confirmation password',
+      });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Passwords do not match',
+      });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'No user found with that email address',
+      });
+    }
+
+    user.password = password;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Password has been reset successfully',
+    });
+  } catch (error) {
+    console.error('Reset Password Error:', error.message);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error during password reset. Please try again.',
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   getUserProfile,
   logoutUser,
+  resetPassword,
 };

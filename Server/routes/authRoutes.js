@@ -5,12 +5,14 @@ const {
   loginUser,
   getUserProfile,
   logoutUser,
+  resetPassword,
 } = require('../controllers/authController');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
 // Public routes
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.patch('/reset-password', resetPassword);
 
 // Protected routes (require valid JWT)
 router.post('/logout', protect, logoutUser);

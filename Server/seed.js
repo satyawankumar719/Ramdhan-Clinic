@@ -16,14 +16,14 @@ const seedDoctors = async () => {
       {
         name: 'Dr. Ramdhan Parjapat',
         email: 'ramdhan@shivshakti.com',
-        password: await bcrypt.hash('password123', 10),
+        password: await bcrypt.hash('ramdhan@2002', 10),
         role:  'doctor',
         specialization: 'General Medicine'
       },
       {
         name: 'Dr. Parveen Parjapat',
         email: 'parveen@shivshakti.com',
-        password: await bcrypt.hash('password123', 10),
+        password: await bcrypt.hash('parveen@2004', 10),
         role: 'doctor',
         specialization: 'Patient Care Specialist'
       }
