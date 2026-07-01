@@ -22,11 +22,15 @@ const app = express();
 
 // Middleware
 const corsOptions = {
-  // Replace with client URL in production (e.g. http://localhost:5173 for Vite)
-  origin: process.env.FRONT_URL, 
-  credentials: true, // Allow cookies to be sent along with CORS requests
+  origin: process.env.FRONT_URL,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  optionsSuccessStatus: 200 // Some legacy browsers (IE11, various Smart TVs) choke on 204
 };
+
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 app.use(express.json()); // Body parser for application/json
 app.use(cookieParser()); // Cookie parser for extracting auth token from cookies
 
