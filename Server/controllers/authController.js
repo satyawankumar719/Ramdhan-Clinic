@@ -13,6 +13,13 @@ const generateToken = (id) => {
     expiresIn: '30d', // Token expires in 30 days
   });
 };
+ const generateRefreshToken = (userId) => {
+  return jwt.sign(
+    { id: userId, type: 'refresh' },
+    process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-key',
+    { expiresIn: '30d' }
+  );
+};
 
 /**
  * @desc    Register a new user
@@ -52,12 +59,20 @@ const registerUser = async (req, res) => {
       const token = generateToken(user._id);
 
       // Optionally set HTTP-only cookie
-      res.cookie('token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-        SameSite:'none'
-      });
+  const refreshtoken = generateRefreshToken(user._id)
+
+    // Optionally set HTTP-only cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      SameSite:'none'
+    }).cookie('refreshtoken',refreshtoken,{
+         httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      SameSite:'none'
+    })
        console.log("cookie sends successfully")
 
       return res.status(201).json({
@@ -123,6 +138,7 @@ const loginUser = async (req, res) => {
     }
 
     const token = generateToken(user._id);
+    const refreshtoken = generateRefreshToken(user._id)
 
     // Optionally set HTTP-only cookie
     res.cookie('token', token, {
@@ -130,7 +146,12 @@ const loginUser = async (req, res) => {
       secure: process.env.NODE_ENV === 'production',
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       SameSite:'none'
-    });
+    }).cookie('refreshtoken',refreshtoken,{
+         httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      SameSite:'none'
+    })
         console.log("cookie sends successfully")
 
     return res.status(200).json({
