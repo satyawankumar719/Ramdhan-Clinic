@@ -98,9 +98,12 @@ export default function BookAppointment({ open, onClose }: BookAppointmentProps)
   const selectedDoctor = doctors.find(d => d._id === formData.doctor);
 
   return (
+    // 1. md:max-h-none लगाकर बड़ी स्क्रीन पर फुल-हाइट और मोबाइल पर 85vh की लिमिट दी है ताकि कंटेंट कटे नहीं।
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] w-[95vw]">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[500px] w-[95vw] max-h-[85vh] md:max-h-[90vh] flex flex-col p-0 overflow-hidden">
+
+        {/* हेडर को पैडिंग दी ताकि स्क्रॉल न हो */}
+        <DialogHeader className="p-6 pb-2">
           <div className="flex items-center justify-between">
             <DialogTitle className="flex items-center gap-2 text-xl font-display">
               <Calendar className="h-5 w-5 text-primary" />
@@ -112,7 +115,8 @@ export default function BookAppointment({ open, onClose }: BookAppointmentProps)
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* 2. मुख्य फॉर्म में overflow-y-auto दिया ताकि छोटे फ़ोन में फॉर्म स्क्रॉल हो सके लेकिन बटन हमेशा दिखें */}
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 pt-2 space-y-4 min-h-0">
           <div>
             <Label>{language === 'hi' ? 'डॉक्टर चुनें' : 'Select Doctor'}</Label>
             <Select
@@ -147,7 +151,7 @@ export default function BookAppointment({ open, onClose }: BookAppointmentProps)
           </div>
 
           {selectedDoctor && (
-            <div className="grid gap-2 rounded-xl bg-secondary/50 p-3 text-sm">
+            <div className="grid gap-2 rounded-xl bg-secondary/50 p-3 text-sm transition-all animate-in fade-in-50">
               <div className="font-medium">{selectedDoctor.name}</div>
               <div className="text-xs text-muted-foreground">
                 {selectedDoctor.specialization || 'General Practice'}
@@ -167,6 +171,7 @@ export default function BookAppointment({ open, onClose }: BookAppointmentProps)
             />
           </div>
 
+          {/* 3. मोबाइल पर Date-Time को एक के नीचे एक किया (grid-cols-1) और स्मॉल स्क्रीन से रो में बदला ताकि कीबोर्ड खुलने पर दिक्कत न हो */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <Label>{language === 'hi' ? 'दिनांक' : 'Date'}</Label>
@@ -193,7 +198,8 @@ export default function BookAppointment({ open, onClose }: BookAppointmentProps)
 
           <div>
             <Label>{language === 'hi' ? 'अपॉइंटमेंट का तरीका' : 'Appointment Mode'}</Label>
-            <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* 4. मोबाइल पर वीडियो / क्लिनिक बटन्स साइड-बाय-साइड करने के लिए grid-cols-2 का इस्तेमाल किया */}
+            <div className="mt-2 grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => setFormData({ ...formData, mode: 'Video' })}
@@ -204,7 +210,7 @@ export default function BookAppointment({ open, onClose }: BookAppointmentProps)
                 }`}
               >
                 <Video className="h-4 w-4" />
-                <span className="text-sm font-medium">{language === 'hi' ? 'वीडियो कॉल' : 'Video Call'}</span>
+                <span className="text-sm font-medium">{language === 'hi' ? 'वीडियो' : 'Video'}</span>
               </button>
               <button
                 type="button"
@@ -216,7 +222,7 @@ export default function BookAppointment({ open, onClose }: BookAppointmentProps)
                 }`}
               >
                 <MapPin className="h-4 w-4" />
-                <span className="text-sm font-medium">{language === 'hi' ? 'क्लिनिक में' : 'In-clinic'}</span>
+                <span className="text-sm font-medium">{language === 'hi' ? 'क्लिनिक' : 'In-clinic'}</span>
               </button>
             </div>
           </div>
@@ -226,14 +232,15 @@ export default function BookAppointment({ open, onClose }: BookAppointmentProps)
             <Textarea
               placeholder={language === 'hi' ? 'अपने लक्षणों या आने का कारण बताएं...' : 'Describe your symptoms or reason for the visit...'}
               className="mt-1"
-              rows={3}
+              rows={2} /* मोबाइल के लिए रो 3 से घटाकर 2 की ताकि जगह बचे */
               value={formData.reason}
               onChange={(e) => setFormData({ ...formData, reason: e.target.value })}
               required
             />
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          {/* 5. बटन्स को हमेशा नीचे एक साथ रखने के लिए flex-row और स्मॉल स्क्रीन्स पर भी सही अलाइनमेंट दी है */}
+          <div className="flex gap-3 pt-2">
             <Button type="button" variant="ghost" onClick={onClose} className="flex-1">
               {language === 'hi' ? 'रद्द करें' : 'Cancel'}
             </Button>
@@ -245,12 +252,12 @@ export default function BookAppointment({ open, onClose }: BookAppointmentProps)
               {loading ? (
                 <span className="flex items-center gap-2">
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                  {language === 'hi' ? 'बुक कर रहे हैं...' : 'Booking...'}
+                  {language === 'hi' ? '...' : 'Booking...'}
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
                   <CheckCircle2 className="h-4 w-4" />
-                  {language === 'hi' ? 'अपॉइंटमेंट बुक करें' : 'Book Appointment'}
+                  <span className="truncate">{language === 'hi' ? 'बुक करें' : 'Book'}</span>
                 </span>
               )}
             </Button>
