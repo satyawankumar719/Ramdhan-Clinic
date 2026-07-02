@@ -12,6 +12,11 @@ const appointmentSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    phone: {
+      type: String,
+      required: [true, 'Please provide a phone number'],
+      trim: true,
+    },
     date: {
       type: String,
       required: [true, 'Please specify the appointment date and time'],

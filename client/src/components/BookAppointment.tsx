@@ -41,18 +41,27 @@ export default function BookAppointment({ open, onClose }: BookAppointmentProps)
   const { bookAppointment } = useAppointments('patient');
   const { doctors } = useDoctors();
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    doctor: string;
+    phone: string;
+    date: string;
+    time: string;
+    reason: string;
+    mode: 'Video' | 'In-clinic';
+    spec: string;
+  }>({
     doctor: '',
+    phone: '',
     date: '',
     time: '',
     reason: '',
-    mode: 'Video' as const,
+    mode: 'Video',
     spec: 'General Practice',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.doctor || !formData.date || !formData.time || !formData.reason || !formData.spec) {
+    if (!formData.doctor || !formData.phone || !formData.date || !formData.time || !formData.reason || !formData.spec) {
       toast.error(language === 'hi' ? 'सभी आवश्यक फील्ड भरें' : 'Please fill all required fields');
       return;
     }
@@ -62,6 +71,7 @@ export default function BookAppointment({ open, onClose }: BookAppointmentProps)
       const fullDate = `${formData.date} at ${formData.time}`;
       await bookAppointment({
         doctor: formData.doctor,
+        phone: formData.phone,
         date: fullDate,
         reason: formData.reason,
         mode: formData.mode,
@@ -70,6 +80,7 @@ export default function BookAppointment({ open, onClose }: BookAppointmentProps)
       toast.success(language === 'hi' ? 'अपॉइंटमेंट सफलतापूर्वक बुक हो गया!' : 'Appointment booked successfully!');
       setFormData({
         doctor: '',
+        phone: '',
         date: '',
         time: '',
         reason: '',
@@ -143,6 +154,18 @@ export default function BookAppointment({ open, onClose }: BookAppointmentProps)
               </div>
             </div>
           )}
+
+          <div>
+            <Label>{language === 'hi' ? 'फोन नंबर' : 'Phone Number'}</Label>
+            <Input
+              type="tel"
+              className="mt-1"
+              placeholder={language === 'hi' ? 'अपना फोन नंबर दर्ज करें' : 'Enter your phone number'}
+              value={formData.phone}
+              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              required
+            />
+          </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>

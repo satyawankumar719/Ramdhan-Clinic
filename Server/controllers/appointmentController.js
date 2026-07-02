@@ -8,13 +8,13 @@ const User = require('../models/User');
  */
 const bookAppointment = async (req, res) => {
   try {
-    const { doctor, date, reason, mode, spec } = req.body;
+    const { doctor, date, reason, mode, spec, phone } = req.body;
 
     // Validate inputs
-    if (!doctor || !date || !reason || !spec) {
+    if (!doctor || !date || !reason || !spec || !phone) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide all required fields (doctor, date, reason, spec)',
+        message: 'Please provide all required fields (doctor, date, reason, spec, phone)',
       });
     }
 
@@ -31,6 +31,7 @@ const bookAppointment = async (req, res) => {
     const appointment = await Appointment.create({
       patient: req.user._id,
       doctor,
+      phone,
       date,
       reason,
       mode: mode || 'Video',

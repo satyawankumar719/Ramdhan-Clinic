@@ -5,6 +5,7 @@ export interface Appointment {
   _id: string;
   patient?: { _id: string; name: string; email: string };
   doctor?: { _id: string; name: string; email: string; specialization?: string };
+  phone?: string;
   date: string;
   reason: string;
   mode: 'Video' | 'In-clinic';
@@ -39,7 +40,7 @@ export function useAppointments(role: 'patient' | 'doctor' | 'admin') {
     }
   };
 
-  const bookAppointment = async (data: { doctor: string; date: string; reason: string; mode?: string; spec: string }) => {
+  const bookAppointment = async (data: { doctor: string; phone: string; date: string; reason: string; mode?: string; spec: string }) => {
     try {
       const response = await apiClient.post('/appointments', data);
       if (response.data.success) {
